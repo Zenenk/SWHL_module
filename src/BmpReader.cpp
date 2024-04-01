@@ -27,7 +27,7 @@ struct BMPInfoHeader {
 };
 #pragma pack(pop)
 
-std::vector<std::vector<uint8_t>> Read24BitBMPToGrayscale(const std::string& filename) {
+std::vector<std::vector<double>> BmpReader(const std::string& filename) {
     std::ifstream file(filename, std::ios::binary);
 
     if (!file) {
@@ -56,21 +56,21 @@ std::vector<std::vector<uint8_t>> Read24BitBMPToGrayscale(const std::string& fil
     const int width = info_header.width;
     const int height = info_header.height;
 
-    std::vector<std::vector<uint8_t>> img(height, std::vector<uint8_t>(width));
+    std::vector<std::vector<double>> img(height, std::vector<double>(width));
 
     // Rows in BMP files are padded to multiples of 4 bytes
     int row_padded = (width * 3 + 3) & (~3);
-    auto* buffer = new uint8_t[row_padded];
+    auto* buffer = new double[row_padded];
 
     for (int i = 0; i < height; ++i) {
         file.read(reinterpret_cast<char*>(buffer), row_padded);
         for (int j = 0; j < width; ++j) {
             int index = j * 3;
-            uint8_t blue = buffer[index];
-            uint8_t green = buffer[index + 1];
-            uint8_t red = buffer[index + 2];
+            double blue = buffer[index];
+            double green = buffer[index + 1];
+            double red = buffer[index + 2];
 
-            img[height - 1 - i][j] = static_cast<uint8_t>(0.21 * red + 0.72 * green + 0.07 * blue);
+            img[height - 1 - i][j] = static_cast<double>(0.21 * red + 0.72 * green + 0.07 * blue);
         }
     }
 
