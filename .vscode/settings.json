@@ -57,7 +57,14 @@
         "set": "cpp",
         "unordered_set": "cpp",
         "xhash": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "ratio": "cpp",
+        "stop_token": "cpp",
+        "thread": "cpp",
+        "array": "cpp",
+        "functional": "cpp",
+        "numeric": "cpp",
+        "unordered_map": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

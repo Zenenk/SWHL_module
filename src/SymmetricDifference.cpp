@@ -38,13 +38,15 @@ bool point_in_polygon(double ximg, double yimg, std::vector<Point> polygon)
 }
 
 int SymmetricDifference(std::vector<std::vector<double>>& img, std::vector<Point> polygon) {
-    int height = input.size();
-    int width = input[0].size();
+    int height = img.size();
+    int width = img[0].size();
     int count_pixels = 0;
 
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
-            if ((point_in_polygon(i, j, polygon) && img[i][j] == 0) || (!point_in_polygon(i, j, polygon) && img[i][j] == 255)) {
+            if ((point_in_polygon(i, j, polygon) && img[i][j] == 0) || 
+                (!point_in_polygon(i, j, polygon) && img[i][j] == 255)) {
+                    
                 count++;
             }
 

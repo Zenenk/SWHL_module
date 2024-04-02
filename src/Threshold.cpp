@@ -1,7 +1,8 @@
 #include <iostream>
 #include <vector>
+#include "../matplotlibcpp.h"
 
-void binarizeImage(std::vector<std::vector<uint8_t>>& image, int h) {
+void binarizeImage(std::vector<std::vector<double>>& image, double h) {
     int rows = image.size();
     int cols = image[0].size();
 

@@ -8,6 +8,9 @@
 #include <MaxDeviation.cpp>
 #include <Threshold.cpp>
 #include <SymmetricDifference.cpp>
+#include <gdspy.h>
+#include <matplot/matplot.h>
+#include <thread>
 
 bool isCorrectBMP(const std::string& fileName) {
 
@@ -41,7 +44,9 @@ int main() {
     std::string bmp_file;
     bool check_bmp = false;
     bool check_gds = false;
-
+    bool flag = true;
+    double h;
+    bool check_h = false;
 
     std::cout << "SWHL_Module Comparison";
     std::cout << "Hello, user!";
@@ -94,9 +99,30 @@ int main() {
         std::string filepath_bmp = "example\\" + bmp_file; 
         std::string filepath_gds = "example\\" + gds_file;
 
-        std::vector<std::vector<double>>img = BmpReader(filepath_bmp);
-        std::vector<Point> vertices = GdsReader(filepath_gds);
+        std::vector<std::vector<double>>img = BmpReader(filepath_bmp, flag);
+        
+        if(flag == false) {
+            std::cout<<"BMP file not found or an incorrect name was entered";
+            return {};
+        }
 
+        std::map<std::pair<int, int>, std::vector<gdspy::Polygon*>> polygons = GdsReader(filepath_gds);
+        
+        int height = img.size();
+        int width = img[0].size();
+        bicubicInterpolate2D(img, height * 3, int width * 3);
+
+        while(!check_h) {
+            std::cout<<"Input h threshold in range (0, 255)";
+            std::cin>>h;
+            if(h<0 or h >255) {
+                std::cout<< "Impossible threshold";
+                std::cout<< "Try again";
+            }
+            else check_h = !check_h;
+        }
+        
+        binarizeImage(img, h);
 
     }   
 }
