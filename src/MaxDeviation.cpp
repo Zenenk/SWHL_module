@@ -5,7 +5,7 @@
 #include <cmath>
 
 struct Point {
-    double x, y;
+  double x, y;
 };
  
 
@@ -50,17 +50,63 @@ double perpendicularDistance(const Point& p, const Point& lineStart, const Point
 }
 
 double MaxDeviation(std::vector<Point> polygon, std::set<std::pair<int, int>>& boundaryPoints) {
-  int height = img.size();
-  int width = img[0].size();
-  double min = std::max(height, width);
+  double max_1 = 0;
+  double max_2 = 0;
+  set <int> :: iterator it_1 = boundaryPoints.begin();
+
+  Point p, lineStart, lineEnd;
+
+  for(int i = 0; i < polygon.size(); i++) {
+    for (int k = 1; it_1 != boundaryPoints.end(); k++, it_1++) {
+      
+      p.x = polygon[i].x;
+      p.y = polygon[i].y;;
+      lineStart.x = (*it_1).first();
+      lineStart.y = (*it_1).second();
+      if(it_1 + 1 == boundaryPoints.end()) {
+        set <int> :: iterator it = boundaryPoints.begin();
+        lineEnd.x = (*it).first();
+        lineEnd.y = (*it).second();
+      }
+      else {
+        lineEnd.x = (*(it + 1)).first();
+        lineEnd.y = (*(it + 1)).second();
+      }
+
+      double cur = perpendicularDistance(p, lineStart, lineEnd);
+      if(max_1 < cur) {
+        max_1 = cur;
+      }
+
+    }
+  }
   
-  set <int> :: iterator it = boundaryPoints.begin();
-  for(int i = 0; i < height; i++) {
-    for(int j = 0; j < width; j++) {
-      if()
+  set <int> :: iterator it_2 = boundaryPoints.begin();
+
+  for (int i = 1; it_2 != boundaryPoints.end(); i++, it_2++) {
+    for(int i = 0; i < polygon.size(); i++) { 
+      Point p, lineStart, lineEnd;
+      p.x = (*it_2).first();
+      p.y = (*it_2).second();
+      lineStart.x = polygon[i].x;
+      lineStart.y = polygon[i].y;
+      if(i + 1 == polygon.size()) {
+        lineEnd.x = polygon[0].x;
+        lineEnd.y = polygon[0].y;
+      }
+      else {
+        lineEnd.x = polygon[i + 1].x;
+        lineEnd.y = polygon[i + 1].y;
+      }
+
+      double cur = perpendicularDistance(p, lineStart, lineEnd);
+      if(max_2 < cur) {
+        max_2 = cur;
+      }
+
     }
   }
 
-
-
+  return std::max(max_1, max_2);
+  
 }

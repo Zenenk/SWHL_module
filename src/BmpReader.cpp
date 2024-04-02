@@ -27,12 +27,14 @@ struct BMPInfoHeader {
 };
 #pragma pack(pop)
 
-std::vector<std::vector<double>> BmpReader(const std::string& filename) {
+std::vector<std::vector<double>> BmpReader(const std::string& filename, bool& flag) {
     std::ifstream file(filename, std::ios::binary);
+    flag = true;
 
     if (!file) {
         std::cerr << "Could not open file " << filename << std::endl;
-        return {};
+        flag = false;
+        return{};
     }
 
     BMPFileHeader file_header;
@@ -43,12 +45,15 @@ std::vector<std::vector<double>> BmpReader(const std::string& filename) {
 
     if (file_header.file_type != 0x4D42) {
         std::cerr << "This is not a valid BMP file." << std::endl;
-        return {};
+        flag = false;
+        return{};
     }
 
     if (info_header.bit_count != 24) {
         std::cerr << info_header.bit_count<< std::endl << "This BMP file is not a 24-bit image." << std::endl;
-        return {};
+        flag = false;
+        return{};
+
     }
 
     file.seekg(file_header.offset_data, std::ios::beg);

@@ -4,19 +4,19 @@
 
 class BoundaryFinder {
 public:
-    void GetBoundary(std::vector<std::vector<double>>& image) {
+    void GetBoundary(std::vector<std::vector<double>>& image, std::set<std::pair<int, int>>& boundaryPoints) {
         for (int j = 0; j < image[0].size(); ++j) {
             for (int i = 0; i < image.size(); ++i) {
                 if (image[i][j] == 255) { // Found first white pixel
-                    SquareTrace(std::make_pair(i, j), image);
+                    SquareTrace(std::make_pair(i, j), image, boundaryPoints);
                 }
             }
         }
     }
 
 private:
-    void SquareTrace(std::pair<int, int> start, std::vector<std::vector<double>>& image) {
-        std::set<std::pair<int, int>> boundaryPoints;
+    void SquareTrace(std::pair<int, int> start, std::vector<std::vector<double>>& image, 
+                    std::set<std::pair<int, int>>& boundaryPoints) {
         boundaryPoints.insert(start);
 
         std::pair<int, int> nextStep = GoLeft(std::make_pair(1, 0));

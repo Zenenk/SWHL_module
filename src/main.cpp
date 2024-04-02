@@ -11,6 +11,9 @@
 #include <gdspy.h>
 #include <matplot/matplot.h>
 #include <thread>
+#include "../matplotlibcpp.h"
+
+namespace plt = matplotlibcpp;
 
 bool isCorrectBMP(const std::string& fileName) {
 
@@ -52,9 +55,9 @@ int main() {
     std::cout << "Hello, user!";
 
     while(true) {
-        std::cout << "Before start, put files into the 'examples' directory";
-        std::cout << "Please, enter the file name and its extension without additional characters and spaces";
-        std::cout << "or exit for finish";
+        std::cout << "Before start, put files into the 'examples' directory" << std::endl;
+        std::cout << "Please, enter the file name and its extension without additional characters and spaces" << std::endl;
+        std::cout << "or exit for finish" << std::endl;
 
         while(!check_bmp) {
             std::cout << "Enter the first file name with bmp format...";
@@ -102,7 +105,7 @@ int main() {
         std::vector<std::vector<double>>img = BmpReader(filepath_bmp, flag);
         
         if(flag == false) {
-            std::cout<<"BMP file not found or an incorrect name was entered";
+            std::cout<<"BMP file not found or an incorrect name was entered.\n";
             return {};
         }
 
@@ -111,18 +114,33 @@ int main() {
         int height = img.size();
         int width = img[0].size();
         bicubicInterpolate2D(img, height * 3, int width * 3);
+        print
 
         while(!check_h) {
-            std::cout<<"Input h threshold in range (0, 255)";
+            std::cout<<"Input h threshold in range (0, 255)\n";
             std::cin>>h;
             if(h<0 or h >255) {
-                std::cout<< "Impossible threshold";
-                std::cout<< "Try again";
+                std::cout<< "Impossible threshold\n";
+                std::cout<< "Try again\n";
             }
             else check_h = !check_h;
         }
         
         binarizeImage(img, h);
-
+        std::set<std::pair<int, int>> boundaryPoints;
+        GetBoundary(boundaryPoints, img);
+        std::cout << "Max deviation is: "<< MaxDeviation(polygon, boundaryPoints) << std::endl;
+        std::cout << "Symmetric difference is:"<< SymmetricDifference(img, polygon) << std::endl;
+        std::cout << "Do you want to continue work? [Y/N]\n";
+        std::string answer;
+        std::cin >> answer;
+        if(answer == "N") {
+            std::cout<<"Programm finished\n";
+            return 0;
+        } 
+        else if(answer != "Y") {
+            std::cout << "Unknown command\n";
+            std::cout << "Try again\n";
+        }
     }   
 }
